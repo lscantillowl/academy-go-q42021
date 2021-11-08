@@ -1,7 +1,7 @@
 package main
 
 import (
-	"go_bootcamp_api/infrastructure/router"
+	"github.com/lscantillowl/academy-go-q42021/infrastructure/router"
 	//good practices convention internals/personal/external
 )
 
