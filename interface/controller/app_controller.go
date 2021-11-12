@@ -4,10 +4,12 @@ import (
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/lscantillowl/academy-go-q42021/domain/model"
 )
@@ -51,4 +53,46 @@ func GetCharacters(w http.ResponseWriter, r *http.Request) {
 
 	}
 	respondWithJSON(w, http.StatusOK, pokemonsList)
+}
+
+func SaveCharacters(w http.ResponseWriter, r *http.Request) {
+	//vars := mux.Vars(r)
+	const myUrl = "https://pokeapi.co/api/v2/pokemon/"
+	response, err := http.Get(myUrl)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer response.Body.Close()
+
+	bodyBytes, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		fmt.Print(err.Error())
+	}
+	var responseObject model.ResponseApi
+	json.Unmarshal(bodyBytes, &responseObject)
+
+	f, err := os.Create("pokemons.csv")
+	defer f.Close()
+
+	if err != nil {
+
+		log.Fatalln("failed to open file", err)
+	}
+
+	writeCSV := csv.NewWriter(f)
+	defer writeCSV.Flush()
+
+	for _, pokemon := range responseObject.Results {
+		s := strings.Split(pokemon.Url, "/")
+		id := s[len(s)-2]
+		record := []string{
+			id,
+			pokemon.Name,
+			pokemon.Url,
+		}
+		if err := writeCSV.Write(record); err != nil {
+			log.Fatalln("error writing record to file", err)
+		}
+	}
+	respondWithJSON(w, http.StatusOK, "Success")
 }
