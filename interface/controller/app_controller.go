@@ -14,20 +14,26 @@ import (
 	"github.com/lscantillowl/academy-go-q42021/domain/model"
 )
 
+// respondWithJSON write json response format to the response writer
 func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
-	response, _ := json.Marshal(payload)
-
+	response, err := json.Marshal(payload)
+	if err != nil {
+		log.Fatalf("Can not convert payload to JSON - %s", err)
+		w.WriteHeader(http.StatusInternalServerError)
+	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
 	w.Write(response)
 }
 
+// Home handler to test the api
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	resp := make(map[string]string)
 	resp["message"] = "Welcome to the Q4 GO Bootcamp API"
 	respondWithJSON(w, http.StatusOK, resp)
 }
 
+// Function to get characters from csv file and return it as json
 func GetCharacters(w http.ResponseWriter, r *http.Request) {
 
 	file, err := os.Open("characters.csv")
@@ -55,8 +61,8 @@ func GetCharacters(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusOK, pokemonsList)
 }
 
+// Save characters to csv file from api call
 func SaveCharacters(w http.ResponseWriter, r *http.Request) {
-	//vars := mux.Vars(r)
 	const myUrl = "https://pokeapi.co/api/v2/pokemon/"
 	response, err := http.Get(myUrl)
 	if err != nil {
