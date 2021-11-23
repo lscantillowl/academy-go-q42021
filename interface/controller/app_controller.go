@@ -78,6 +78,9 @@ func SaveCharacters(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(bodyBytes, &responseObject)
 
 	f, err := os.Create("pokemons.csv")
+	if err != nil {
+		log.Fatal(err)
+	}
 	defer f.Close()
 
 	if err != nil {
