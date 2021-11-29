@@ -31,5 +31,5 @@ func (a *App) Run(addr string) {
 func (a *App) initializeRoutes() {
 	a.Router.HandleFunc("/", controller.HomeHandler).Methods("GET")
 	a.Router.HandleFunc("/characters", controller.GetCharacters).Methods("GET")
-	a.Router.HandleFunc("/save_characters/{id}", controller.SaveCharacters).Methods("GET")
+	a.Router.HandleFunc("/save_characters", controller.SaveCharacters).Methods("GET")
 }
