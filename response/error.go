@@ -8,7 +8,7 @@ import (
 
 func HandleError(code int, msg string) model.Response {
 	return model.Response{
-		Message: "Bad type parameter",
+		Message: msg,
 		Code:    http.StatusBadRequest,
 	}
 }
