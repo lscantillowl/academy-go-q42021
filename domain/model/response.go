@@ -1,5 +1,6 @@
 package model
 
+// Response struct is used to return the response to the client
 type Response struct {
 	Message  string      `json:"message"`
 	Code     int         `json:"code"`
