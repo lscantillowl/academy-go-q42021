@@ -1,12 +1,12 @@
 package main
 
 import (
-	"go_bootcamp_api/infrastructure/router"
-	//good practices convention internals/personal/external
+	"github.com/lscantillowl/academy-go-q42021/config"
+	"github.com/lscantillowl/academy-go-q42021/infrastructure/router"
 )
 
 func main() {
 	a := router.App{}
 	a.Initialize()
-	a.Run(":8080")
+	a.Run(config.Port)
 }
